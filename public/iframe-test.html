@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iframe Test</title>
+</head>
+<body>
+    <h1>Basic Iframe Test</h1>
+    
+    <h2>Regular iframe - example.com</h2>
+    <iframe src="http://example.com" width="800" height="400" style="border: 1px solid #ccc;"></iframe>
+    
+    <h2>Proxy iframe - example.com via proxy</h2>
+    <iframe src="http://localhost:3002/proxy?url=http://example.com" width="800" height="400" style="border: 1px solid #ccc;"></iframe>
+    
+    <h2>X-Frame-Bypass Test</h2>
+    <script type="module">
+        import './node_modules/x-frame-bypass/x-frame-bypass.js';
+    </script>
+    <x-frame-bypass src="http://example.com" style="width: 800px; height: 400px; border: 1px solid #ccc; display: block;"></x-frame-bypass>
+    
+    <script>
+        console.log('Iframe test page loaded');
+        
+        // Test if x-frame-bypass is available
+        setTimeout(() => {
+            if (customElements.get('x-frame-bypass')) {
+                console.log('x-frame-bypass custom element is registered');
+            } else {
+                console.log('x-frame-bypass custom element is NOT registered');
+            }
+        }, 1000);
+        
+        // Add load listeners
+        const iframes = document.querySelectorAll('iframe');
+        iframes.forEach((iframe, index) => {
+            iframe.addEventListener('load', () => {
+                console.log(`Iframe ${index} loaded successfully:`, iframe.src);
+            });
+            iframe.addEventListener('error', () => {
+                console.log(`Iframe ${index} failed to load:`, iframe.src);
+            });
+        });
+        
+        // Add listener for x-frame-bypass
+        setTimeout(() => {
+            const bypass = document.querySelector('x-frame-bypass');
+            if (bypass) {
+                bypass.addEventListener('load', () => {
+                    console.log('x-frame-bypass loaded successfully');
+                });
+                bypass.addEventListener('error', () => {
+                    console.log('x-frame-bypass failed to load');
+                });
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

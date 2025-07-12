@@ -1,0 +1,132 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/multi_app_dashboard/app/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  apps          App[]
+  bookmarks     Bookmark[]
+  analytics     Analytics[]
+  preferences   UserPreferences?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model App {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  url         String
+  icon        String?
+  category    String?
+  description String?
+  position    Int      @default(0)
+  isActive    Boolean  @default(true)
+  isFavorite  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookmarks Bookmark[]
+  analytics Analytics[]
+
+  @@index([userId, position])
+}
+
+model Bookmark {
+  id          String   @id @default(cuid())
+  userId      String
+  appId       String
+  title       String
+  url         String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  app  App  @relation(fields: [appId], references: [id], onDelete: Cascade)
+
+  @@index([userId, appId])
+}
+
+model Analytics {
+  id           String   @id @default(cuid())
+  userId       String
+  appId        String
+  sessionStart DateTime @default(now())
+  sessionEnd   DateTime?
+  duration     Int?     // in seconds
+  clickCount   Int      @default(0)
+  date         DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  app  App  @relation(fields: [appId], references: [id], onDelete: Cascade)
+
+  @@index([userId, appId, date])
+}
+
+model UserPreferences {
+  id           String @id @default(cuid())
+  userId       String @unique
+  theme        String @default("light") // light, dark, system
+  layout       String @default("single") // single, split-h, split-v, grid-3, grid-4
+  sidebarWidth Int    @default(240)
+  autoRefresh  Boolean @default(false)
+  refreshInterval Int @default(300) // seconds
+  notifications Boolean @default(true)
+  keyboardShortcuts Boolean @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

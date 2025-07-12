@@ -1,0 +1,9 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[413],{7028:function(e,t,o){Promise.resolve().then(o.bind(o,3554))},3554:function(e,t,o){"use strict";o.r(t),o.d(t,{default:function(){return r}});var s=o(7437),l=o(2265);function n({src:e,title:t}){let[o,n]=(0,l.useState)("loading");(0,l.useEffect)(()=>{console.log("RawIframeTest: Component mounted, src:",e),n("loading");let t=setTimeout(()=>{console.log("RawIframeTest: Timeout reached, marking as loaded"),n("loaded")},3e3);return()=>clearTimeout(t)},[e]),console.log("RawIframeTest: Rendering with status:",o);let r=`
+    <iframe 
+      src="${e}" 
+      title="${t}"
+      style="width: 100%; height: 300px; border: 1px solid #ccc;"
+      onload="console.log('Raw iframe loaded: ${e}')"
+      onerror="console.log('Raw iframe error: ${e}')"
+    ></iframe>
+  `;return(0,s.jsxs)("div",{style:{width:"100%",height:"100%",border:"1px solid #ddd",padding:"20px"},children:[(0,s.jsxs)("div",{style:{marginBottom:"10px"},children:["Status: ",o," | Title: ",t]}),"loading"===o&&(0,s.jsxs)("div",{style:{color:"blue",marginBottom:"10px"},children:["⏳ Loading ",t,"... (using raw HTML)"]}),"loaded"===o&&(0,s.jsxs)("div",{style:{color:"green",marginBottom:"10px"},children:["✅ ",t," should be loaded now!"]}),(0,s.jsx)("div",{dangerouslySetInnerHTML:{__html:r}})]})}function r(){return(0,s.jsxs)("div",{className:"p-4",children:[(0,s.jsx)("h1",{className:"text-2xl font-bold mb-4",children:"Raw Iframe Test"}),(0,s.jsx)("div",{className:"space-y-4",children:(0,s.jsxs)("div",{children:[(0,s.jsx)("h2",{className:"text-lg font-semibold mb-2",children:"Raw HTML Iframe Test"}),(0,s.jsx)(n,{src:"http://example.com",title:"Example.com Raw"})]})})]})}}},function(e){e.O(0,[971,117,744],function(){return e(e.s=7028)}),_N_E=e.O()}]);
