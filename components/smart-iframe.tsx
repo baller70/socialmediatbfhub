@@ -33,7 +33,7 @@ export function SmartIframe({
     
     // Use proxy by default for better embedding success
     if (embedMethod === 'proxy' && proxyAvailable) {
-      const proxySrc = `http://localhost:4000/proxy?url=${encodeURIComponent(src)}`;
+      const proxySrc = `/api/proxy?url=${encodeURIComponent(src)}`;
       console.log('SmartIframe: Using proxy method', proxySrc);
       setCurrentSrc(proxySrc);
       setAttemptedMethods(['proxy']);
@@ -48,7 +48,7 @@ export function SmartIframe({
   }, [src, embedMethod, proxyAvailable, onLoad]);
 
   const tryProxy = () => {
-    const proxySrc = `http://localhost:4000/proxy?url=${encodeURIComponent(src)}`;
+    const proxySrc = `/api/proxy?url=${encodeURIComponent(src)}`;
     setCurrentSrc(proxySrc);
     setAttemptedMethods([...attemptedMethods, 'proxy']);
   };

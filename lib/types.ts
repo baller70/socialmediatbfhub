@@ -77,3 +77,33 @@ export interface DashboardState {
   selectedAppIds: string[];
   iframeRefs: Map<string, IframeRef>;
 }
+
+// Desktop/Electron specific types
+export interface Panel {
+  id: string;
+  url: string;
+  title?: string;
+  isActive?: boolean;
+  position?: number;
+  category?: string;
+  icon?: string;
+}
+
+export interface DesktopState {
+  panels: Panel[];
+  gridLayout: GridLayout;
+  sidebarWidth: number;
+  isFullscreen: boolean;
+}
+
+export type GridLayout = '1x1' | '2x1' | '2x2' | '3x2' | '3x3';
+
+export interface WebViewRef {
+  id: string;
+  webContents: any;
+  canGoBack: boolean;
+  canGoForward: boolean;
+  isLoading: boolean;
+  currentUrl: string;
+  title: string;
+}

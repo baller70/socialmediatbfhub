@@ -52,3 +52,6 @@ pids
 
 # Optional eslint cache
 .eslintcache
+core
+*.core
+# Core dumps and large binary files
